@@ -1,8 +1,8 @@
 ========================================================================
- vibegit EVIDENCE LOG (v1.0.1)
+ vibegit EVIDENCE LOG (v1.0.2 - English README)
 ========================================================================
-timestamp : 2026-11-15T01:48:35Z
-tool sha256: c8a8381951515c952a23243cb1b5ca8f47bcec7fdcd645d4928f9524f5395656
+timestamp : 2026-11-15T06:16:35Z
+tool sha256: 7dd8fdfa88058a4ff04bb44e9aae72c8fb00612769c2447f7209aa46f91614b4
 clawhub   : thiennhant95/vibegit
 
 ---- TEST SUITE (11 tests) ----
@@ -11,15 +11,16 @@ test deletions, badge + gate, share line, Markdown/JSON contract, non-repo exit.
 Ran 11 tests: OK. CI matrix: ubuntu + windows, Python 3.10/3.12.
 
 ---- SELF-REPORT (dogfood) ----
-repo vibegit, 1 commit: slop 10/100 (Clean), AI-assisted ~0%
+vibegit repo: slop 10/100 (Clean), AI-assisted ~0% (1 commit)
 
----- REAL-WORLD SAMPLES (informational) ----
-agent-skills (4 commits):      slop 10/100 (Clean), AI-assisted ~0%
-pallets/click (shallow=1):     slop 10/100 (Clean), AI-assisted ~0%
-NOTE: shallow clones expose one commit; use full clones for real reports.
+---- DOCS (v1.0.2) ----
+- README.md: canonical international English documentation
+- README.vi.md: Vietnamese documentation
+- README.en.md removed (redundant)
+- SKILL.md: English (unchanged content, version bump)
 
 ---- DESIGN INVARIANTS ----
 - read-only: only git log and git rev-parse with fixed argv (shell=False)
 - never reads file contents, never touches secrets, no network, no uploads
-- deterministic output (no timestamps in reports)
-- AI figure is an estimate with confidence band (confirmed vs likely)
+- deterministic reports (no timestamps)
+- AI figure is an estimate with a confidence band (confirmed vs likely)
