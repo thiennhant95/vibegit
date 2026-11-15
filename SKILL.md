@@ -1,11 +1,11 @@
 ---
 name: vibegit
-description: Estimate how much of a git repository is AI-assisted and how sloppy it is. Use when the user asks whether a repo (or recent work) is "vibe coded", wants an AI-slop score, a repo health/quality snapshot, a badge, or a CI gate based on commit history. Read-only: commit metadata only, no file contents, no network.
+description: Estimate how much of a git repository is AI-assisted and how sloppy it is. Use when the user asks whether a repo (or recent work) is "vibe coded", wants an AI-slop score, a repo health/quality snapshot, a badge, or a CI gate based on commit history. Read-only - commit metadata only, no file contents, no network.
 allowed-tools: Read, Bash(git:*), Bash(python3:*)
 permissions: [file_read, file_write, process]
 ---
 
-# vibegit v1.0.0
+# vibegit v1.0.1
 
 Estimate AI-assisted work and slop signals from git history. One command, deterministic output, zero dependencies.
 

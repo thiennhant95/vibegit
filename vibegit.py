@@ -19,7 +19,7 @@ import re
 import subprocess
 import sys
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 AI_TOOLS = [
     "claude", "copilot", "cursor", "codex", "aider", "devin", "gemini",
