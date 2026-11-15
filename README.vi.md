@@ -30,6 +30,14 @@ Công cụ đo tín hiệu, không kết luận ai viết code. Mọi con số A
 
 ## Cài đặt
 
+### ClawHub
+
+```bash
+clawhub install thiennhant95/vibegit
+```
+
+### Từ source
+
 Không cần cài:
 
 ```bash
@@ -122,6 +130,12 @@ python3 tests/test_vibegit.py
 ```
 
 11 test dựng repo tổng hợp, kiểm tra phát hiện AI (trailer/author/message), tín hiệu (giant commit, test deletion, short message), badge/gate, JSON deterministic và xử lý lỗi. CI chạy Ubuntu + Windows với Python 3.10 và 3.12.
+
+## Skill liên quan
+
+- **vibecheck** — audit code AI sinh ra (bảo mật + AI slop): [ClawHub](https://clawhub.ai/thiennhant95/vibecheck) · [GitHub](https://github.com/thiennhant95/vibecheck)
+- **skill-firewall** — quét skill bên thứ ba trước khi cài: [ClawHub](https://clawhub.ai/thiennhant95/skill-firewall) · [GitHub](https://github.com/thiennhant95/agent-skills)
+- **undo-first** — guard hành động có thể rollback (snapshot, risk gate, restore): [ClawHub](https://clawhub.ai/thiennhant95/undo-first) · [GitHub](https://github.com/thiennhant95/agent-skills)
 
 ## License
 

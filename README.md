@@ -32,6 +32,14 @@ It measures signals, not authorship. Every AI figure is an estimate with a confi
 
 ## Install
 
+### ClawHub
+
+```bash
+clawhub install thiennhant95/vibegit
+```
+
+### From source
+
 No installation required:
 
 ```bash
@@ -124,6 +132,12 @@ python3 tests/test_vibegit.py
 ```
 
 11 tests build synthetic repositories and assert detection (AI trailers/authors/messages), signal extraction (giant commits, test deletions, short messages), badge/gate behavior, JSON determinism, and error handling. CI runs on Ubuntu and Windows with Python 3.10 and 3.12.
+
+## Related skills
+
+- **vibecheck** — audit AI-generated code for security issues and AI slop: [ClawHub](https://clawhub.ai/thiennhant95/vibecheck) · [GitHub](https://github.com/thiennhant95/vibecheck)
+- **skill-firewall** — scan third-party agent skills before installing them: [ClawHub](https://clawhub.ai/thiennhant95/skill-firewall) · [GitHub](https://github.com/thiennhant95/agent-skills)
+- **undo-first** — reversible-action guard with snapshots, risk gate, and verified restore: [ClawHub](https://clawhub.ai/thiennhant95/undo-first) · [GitHub](https://github.com/thiennhant95/agent-skills)
 
 ## License
 

@@ -5,9 +5,15 @@ allowed-tools: Read, Bash(git:*), Bash(python3:*)
 permissions: [file_read, file_write, process]
 ---
 
-# vibegit v1.0.2
+# vibegit v1.0.3
 
 Estimate AI-assisted work and slop signals from git history. One command, deterministic output, zero dependencies.
+
+## Install
+
+```bash
+clawhub install thiennhant95/vibegit
+```
 
 ## When to use
 
@@ -52,6 +58,12 @@ Exit codes: `0` ok · `1` score > `--max-score` · `2` not a git repo / no commi
 - Heuristic: AI work without trailers, bot authors, or message markers can be invisible.
 - Shallow clones (`--depth 1`) expose one commit; use a full clone.
 - Long-lived repos skew churn/lockfile metrics; use `--since` for comparisons.
+
+## Related skills
+
+- `vibecheck` — audit AI-generated code for security issues and AI slop: `clawhub install thiennhant95/vibecheck`
+- `skill-firewall` — scan third-party agent skills before installing them: `clawhub install thiennhant95/skill-firewall`
+- `undo-first` — reversible-action guard with snapshots, risk gate, and verified restore: `clawhub install thiennhant95/undo-first`
 
 Source + tests: https://github.com/thiennhant95/vibegit
 License: MIT.

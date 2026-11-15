@@ -1,8 +1,8 @@
 ========================================================================
- vibegit EVIDENCE LOG (v1.0.2 - English README)
+ vibegit EVIDENCE LOG (v1.0.3 - ClawHub install + related skills)
 ========================================================================
 timestamp : 2026-11-15T06:16:35Z
-tool sha256: 7dd8fdfa88058a4ff04bb44e9aae72c8fb00612769c2447f7209aa46f91614b4
+tool sha256: 66c79de8e6b85703813a5aa6c799a293ba734cf3c35fba6ad3a6fb6645bdfc49
 clawhub   : thiennhant95/vibegit
 
 ---- TEST SUITE (11 tests) ----
