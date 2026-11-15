@@ -1,15 +1,8 @@
-# 🧪 vibegit
+# vibegit
 
-**Repo của bạn bao nhiêu phần trăm là "AI slop"?** Một lệnh, hai giây, biết ngay.
+**How much of this repository is AI-assisted — and how sloppy is it?**
 
-`vibegit` đọc lịch sử git (chỉ metadata commit, **không đọc nội dung file**, không gọi mạng) và trả về:
-
-- **Slop score 0–100** — càng cao càng nhiều dấu hiệu code ẩu/AI hoá vội
-- **Ước lượng AI-assisted** — % commit có dấu hiệu AI, tách rõ *confirmed* (trailer/author) và *likely* (message)
-- **Top tín hiệu**: commit khổng lồ, message cụt, xoá test, file bị sửa liên tục, commit chỉ đụng lockfile
-- **Badge SVG** để dán vào README + một dòng `--share` để đăng X/Bluesky
-
-Zero dependency. Chỉ cần Python 3.8+ và `git`.
+`vibegit` reads git history (commit metadata only — never file contents, no network) and returns a **0–100 slop score**, an **AI-assistance estimate**, a per-signal breakdown, an SVG badge, and a CI gate. Zero dependencies; Python 3.8+ and `git`.
 
 ```
 +-- vibegit ----------------------------------------------------
@@ -31,52 +24,67 @@ Zero dependency. Chỉ cần Python 3.8+ và `git`.
 +--------------------------------------------------------------
 ```
 
-## Vì sao?
+## Why
 
-Vibe coding đã thắng. Nhưng "repo này có bao nhiêu phần là máy viết, và nó có ẩu không?" thì chưa ai trả lời được. `vibegit` trả lời bằng dữ liệu có sẵn: git history.
+AI-assisted work leaves traces in git: co-author trailers, bot authors, "Generated with …" messages, oversized commits without tests, `wip` subjects, deleted test files, lockfile-only commits. `vibegit` turns those traces into one number and a transparent breakdown, so teams can talk about **process quality** instead of guessing.
 
-Nó không đoán mò nội dung. Nó nhìn vào thứ AI để lại: trailer `Co-Authored-By`, author bot/AI, message "Generated with …", commit 600 dòng không test, message `wip`, test bị xoá, lockfile bị commit riêng…
+It measures signals, not authorship. Every AI figure is an estimate with a confidence band.
 
-## Cài đặt
+## Install
 
-Không cần cài. Copy `vibegit.py` vào máy, hoặc:
+No installation required:
 
 ```bash
 git clone https://github.com/thiennhant95/vibegit && cd vibegit
 python3 vibegit.py --help
 ```
 
-## Dùng
+Or copy `vibegit.py` into any project. The only runtime requirement is `git` on `PATH`.
+
+## Usage
 
 ```bash
-python3 vibegit.py .                          # card tổng quan
-python3 vibegit.py . --format md > report.md  # Markdown (PR comment)
-python3 vibegit.py . --format json            # JSON cho tool khác
-python3 vibegit.py . --badge vibegit.svg      # badge cho README
-python3 vibegit.py . --share                  # 1 dòng để đăng mạng xã hội
-python3 vibegit.py . --since "90 days ago"    # chỉ 90 ngày gần nhất
-python3 vibegit.py . --max-score 40           # CI gate: fail nếu slop > 40
+python3 vibegit.py .                          # overview card
+python3 vibegit.py . --format md > report.md  # Markdown report
+python3 vibegit.py . --format json            # JSON for other tools
+python3 vibegit.py . --badge vibegit.svg      # SVG badge
+python3 vibegit.py . --share                  # one-line summary
+python3 vibegit.py . --since "90 days ago"    # time window
+python3 vibegit.py . --max-score 40           # CI gate (exit 1 above 40)
 ```
 
-**Exit codes:** `0` ok · `1` vượt `--max-score` · `2` không phải git repo / không có commit · `4` lỗi git.
+### Options
 
-## Cách tính điểm
+| Flag | Description |
+|---|---|
+| `--format text\|card\|md\|json\|badge` | Output format (default: text card) |
+| `--since`, `--until` | Restrict history (any `git log` date expression) |
+| `--include-merges` | Count merge commits (excluded by default) |
+| `--badge FILE` | Write an SVG badge |
+| `--share` | Print only the shareable one-liner |
+| `--max-score N` | Exit 1 when the slop score exceeds N |
+| `--top N` | Number of authors to show (default 10) |
+| `--version` | Print the version |
 
-| Tín hiệu | Trọng số tối đa | Ghi chú |
+**Exit codes:** `0` ok · `1` score above `--max-score` · `2` not a git repository / no commits · `4` git error.
+
+## Scoring
+
+| Signal | Max points | Rule |
 |---|---|---|
-| AI assistance | 30 | `confirmed% + 0.5 × likely%`, cap 60% |
-| Giant commits | 10 | commit > 400 dòng thay đổi |
-| Short messages | 10 | subject < 15 ký tự hoặc `wip/fix/update/...` |
-| Test deletions | 20 | commit xoá file test mà không thêm gì |
-| File churn | 15 | % file bị sửa > 5 lần |
-| Lockfile-only | 15 | commit chỉ đụng lockfile |
+| AI assistance | 30 | `confirmed% + 0.5 × likely%`, capped at 60% |
+| Giant commits | 10 | more than 400 changed lines |
+| Short messages | 10 | subject under 15 characters, or `wip`/`fix`/`update`/… |
+| Test deletions | 20 | commit removes test files without additions |
+| File churn | 15 | percentage of files edited more than 5 times |
+| Lockfile-only | 15 | commits that only touch lockfiles |
 
-Verdict: `0–14` Clean · `15–34` Mild slop · `35–59` Slop · `60+` Heavy slop.
+Verdicts: `0–14` Clean · `15–34` Mild slop · `35–59` Slop · `60+` Heavy slop.
 
-**Confirmed** = trailer `Co-Authored-By` / `Assisted-by` / `Generated-by` có tên AI, author/committer là bot AI, hoặc message "Generated with [tool]".
-**Likely** = message/trailer nhắc tới AI tool nhưng không đủ chắc.
+**Confirmed** AI signals: AI-named `Co-Authored-By` / `Assisted-by` / `Generated-by` trailers, AI bot authors, or explicit "Generated with [tool]" messages.
+**Likely** signals: an AI tool is mentioned in the message or trailer without a hard signal.
 
-Con số AI-assisted là **ước lượng có dải tin cậy**, không phải bằng chứng tác giả. Repo ít commit (<15) sẽ ghi confidence thấp.
+Repositories with fewer than 15 commits are reported with low confidence. AI assistance is an estimate, not proof of who wrote the code.
 
 ## Badge
 
@@ -84,37 +92,43 @@ Con số AI-assisted là **ước lượng có dải tin cậy**, không phải 
 ![vibegit](vibegit.svg)
 ```
 
-Màu đổi theo verdict: xanh (Clean) → vàng (Mild) → cam (Slop) → đỏ (Heavy).
+The badge color follows the verdict: green (Clean), yellow (Mild), orange (Slop), red (Heavy).
 
 ## CI
 
 ```yaml
 - name: vibegit
   run: python3 vibegit.py . --max-score 40 --format md > vibegit.md
-- uses: actions/upload-artifact@v4
-  with: {name: vibegit-report, path: vibegit.md}
 ```
 
-Xem `examples/github-action.yml`.
+A full workflow example is in `examples/github-action.yml`. Use `fetch-depth: 0` so the entire history is available.
 
-## Quyền riêng tư
+## Privacy
 
-- Chỉ chạy `git log` / `git rev-parse` (read-only).
-- **Không đọc nội dung file**, không đọc secret, không gọi mạng, không upload gì.
-- Không thực thi nội dung repo.
+- Only `git log` and `git rev-parse` run, with a fixed argument list (`shell=False`).
+- Never reads file contents, never touches secrets, never calls the network, never uploads anything.
+- Never executes repository content.
+- Writes only the files you explicitly request (`--badge` path, redirected reports).
 
-## Giới hạn (nói thật)
+## Limitations
 
-- Là **heuristic**, không phát hiện được AI viết không để lại dấu vết (không trailer, không bot, message bình thường).
-- Không đánh giá đúng/sai thuật toán; chỉ đo dấu hiệu quy trình.
-- Shallow clone (`--depth 1`) chỉ thấy 1 commit — dùng full clone để có kết quả đầy đủ.
-- Chỉ số churn/lockfile có thể cao ở repo lớn nhiều năm; dùng `--since` để so sánh công bằng.
+- Heuristic: AI work without trailers, bot authors, or message markers can be invisible.
+- Measures process signals, not correctness.
+- Shallow clones (`--depth 1`) expose only the latest commit; use a full clone.
+- Long-lived repositories skew churn and lockfile metrics; use `--since` for fair comparisons.
 
-## Roadmap
+## Development
 
-- [ ] `--compare` hai khoảng thời gian (trước/sau khi dùng AI)
-- [ ] `--leaderboard DIR` xếp hạng nhiều repo
-- [ ] phát hiện "test bị vô hiệu hoá" (skip/xfail tăng)
-- [ ] ước lượng thời gian tiết kiệm/độ rủi ro theo ngôn ngữ
+```bash
+python3 tests/test_vibegit.py
+```
 
-License MIT.
+11 tests build synthetic repositories and assert detection (AI trailers/authors/messages), signal extraction (giant commits, test deletions, short messages), badge/gate behavior, JSON determinism, and error handling. CI runs on Ubuntu and Windows with Python 3.10 and 3.12.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
+
+---
+
+Vietnamese documentation: [README.vi.md](README.vi.md).

@@ -5,7 +5,7 @@ allowed-tools: Read, Bash(git:*), Bash(python3:*)
 permissions: [file_read, file_write, process]
 ---
 
-# vibegit v1.0.1
+# vibegit v1.0.2
 
 Estimate AI-assisted work and slop signals from git history. One command, deterministic output, zero dependencies.
 
